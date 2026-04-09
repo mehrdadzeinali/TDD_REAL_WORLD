@@ -35,7 +35,15 @@ export function calculPrice(basket: Basket, date: Date = new Date()): number {
       }
     }
     if (discount.type === "PERCENTAGE") {
-      total = total - total * ((discount as any).value / 100);
+      const productType = (discount as any).productType;
+      if (productType) {
+        const subtotal = basket.products
+          .filter((p) => p.type === productType)
+          .reduce((sum, p) => sum + p.price * p.quantity, 0);
+        total = total - subtotal * ((discount as any).value / 100);
+      } else {
+        total = total - total * ((discount as any).value / 100);
+      }
     }
     if (discount.type === "FIXED") {
       total = total - (discount as any).value;

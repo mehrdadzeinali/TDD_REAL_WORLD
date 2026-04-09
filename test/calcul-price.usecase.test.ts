@@ -67,6 +67,18 @@ describe("calculPrice", () => {
 		expect(calculPrice(basket, normalDate)).toBe(100);
 	});
 
+	it("should apply percentage discount only on specific product type", () => {
+		const basket = {
+			products: [
+				{ name: "T-shirt", quantity: 1, type: "TSHIRT" as const, price: 50 },
+				{ name: "Pull", quantity: 1, type: "PULL" as const, price: 50 },
+			],
+			discounts: [{ type: "PERCENTAGE", value: 10, productType: "TSHIRT" }],
+		};
+
+		expect(calculPrice(basket)).toBe(95);
+	});
+
 	it("should not go below 1€ with black friday discount", () => {
 		const blackFridayDate = new Date("2025-11-28T12:00:00");
 		const basket = {
