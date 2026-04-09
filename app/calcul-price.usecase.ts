@@ -22,10 +22,16 @@ function isBlackFridayWeekend(date: Date): boolean {
   return date >= blackFridayStart && date <= blackFridayEnd;
 }
 
+const DISCOUNT_ORDER = ["BUY_ONE_GET_ONE", "PERCENTAGE", "FIXED", "BLACK_FRIDAY"];
+
 export function calculPrice(basket: Basket, date: Date = new Date()): number {
   let total = basket.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
 
-  for (const discount of basket.discounts) {
+  const sortedDiscounts = [...basket.discounts].sort(
+    (a, b) => DISCOUNT_ORDER.indexOf(a.type) - DISCOUNT_ORDER.indexOf(b.type)
+  );
+
+  for (const discount of sortedDiscounts) {
     if (discount.type === "BUY_ONE_GET_ONE") {
       const productType = (discount as any).productType;
       const product = basket.products.find((p) => p.type === productType);

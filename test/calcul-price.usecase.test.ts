@@ -85,6 +85,34 @@ describe("calculPrice", () => {
 		expect(calculPrice(basket)).toBe(45);
 	});
 
+	it("should apply multiple discounts in order: product then percentage then black friday", () => {
+		const blackFridayDate = new Date("2025-11-28T12:00:00");
+		const basket = {
+			products: [{ name: "T-shirt", quantity: 2, type: "TSHIRT" as const, price: 50 }],
+			discounts: [
+				{ type: "BUY_ONE_GET_ONE", productType: "TSHIRT" },
+				{ type: "PERCENTAGE", value: 10 },
+				{ type: "BLACK_FRIDAY" },
+			],
+		};
+
+		expect(calculPrice(basket, blackFridayDate)).toBe(22.5);
+	});
+
+	it("should enforce discount order regardless of input order", () => {
+		const blackFridayDate = new Date("2025-11-28T12:00:00");
+		const basket = {
+			products: [{ name: "T-shirt", quantity: 2, type: "TSHIRT" as const, price: 50 }],
+			discounts: [
+				{ type: "BLACK_FRIDAY" },
+				{ type: "PERCENTAGE", value: 10 },
+				{ type: "BUY_ONE_GET_ONE", productType: "TSHIRT" },
+			],
+		};
+
+		expect(calculPrice(basket, blackFridayDate)).toBe(22.5);
+	});
+
 	it("should apply percentage discount only on specific product type", () => {
 		const basket = {
 			products: [
