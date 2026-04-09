@@ -32,6 +32,33 @@ function isBlackFridayWeekend(date: Date): boolean {
 
 const DISCOUNT_ORDER = ["BUY_ONE_GET_ONE", "PERCENTAGE", "FIXED", "BLACK_FRIDAY"];
 
+// Test 1 : panier sans code promo
+// Use case : calculPrice = (basket) => basket.products.reduce((total, p) => total + p.price * p.quantity, 0)
+
+// Test 2 : réduction en pourcentage
+// Use case : ajout du cas PERCENTAGE → total - total * (value / 100)
+
+// Test 3 : réduction fixe
+// Use case : ajout du cas FIXED → total - value
+
+// Test 4 : réduction fixe ne descend pas sous 1€
+// Use case : Math.max(1, total)
+
+// Test 5 : 1 acheté = 1 offert
+// Use case : ajout du cas BUY_ONE_GET_ONE → floor(quantity / 2) produits offerts déduits
+
+// Tests 6 & 7 : seuil minimum (non atteint / atteint)
+// Use case : si minAmount && total < minAmount → skip le discount
+
+// Tests 8 & 9 : cumul + ordre forcé des discounts
+// Use case : refacto → tri par DISCOUNT_ORDER avant la boucle (BUY_ONE_GET_ONE → PERCENTAGE/FIXED → BLACK_FRIDAY)
+
+// Test 10 : discount sur type de produit spécifique
+// Use case : si productType → appliquer PERCENTAGE uniquement sur le sous-total filtré par type
+
+// Tests 11, 12 & 13 : Black Friday (pendant / hors weekend / min 1€)
+// Use case : ajout du cas BLACK_FRIDAY → total * 0.5 uniquement si isBlackFridayWeekend(date)
+
 export function calculPrice(basket: Basket, date: Date = new Date()): number {
   let total = basket.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
 
