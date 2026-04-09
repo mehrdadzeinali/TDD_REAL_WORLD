@@ -16,6 +16,14 @@ export type Basket = {
   discounts: Discount[];
 };
 
+export const discountCodeMap: Record<string, Discount> = {
+  BLACKFRIDAY: { type: "BLACK_FRIDAY" },
+  ONEFREEPULL: { type: "BUY_ONE_GET_ONE", productType: "PULL" } as any,
+  DISCOUNTEURO30: { type: "FIXED", value: 30 } as any,
+  DISCOUNTEURO10: { type: "FIXED", value: 10 } as any,
+  DISCOUNTPERCENT10: { type: "PERCENTAGE", value: 10 } as any,
+};
+
 function isBlackFridayWeekend(date: Date): boolean {
   const blackFridayStart = new Date("2025-11-28T00:00:00");
   const blackFridayEnd = new Date("2025-11-30T23:59:59");

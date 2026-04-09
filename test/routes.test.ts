@@ -22,10 +22,10 @@ describe("POST /baskets", () => {
 		expect(response.body).toEqual({ total: 40 });
 	});
 
-	it("should apply percentage discount", async () => {
+	it("should apply percentage discount with reduction code", async () => {
 		const response = await request(app).post("/baskets").send({
 			products: [{ name: "T-shirt", quantity: 1, type: "TSHIRT", price: 100 }],
-			discounts: [{ type: "PERCENTAGE", value: 10 }],
+			reductionCode: "DISCOUNTPERCENT10",
 		});
 
 		expect(response.status).toBe(200);

@@ -1,6 +1,6 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
-import { calculPrice } from "../../app/calcul-price.usecase";
+import { calculPrice, discountCodeMap } from "../../app/calcul-price.usecase";
 
 const app = express();
 app.use(express.json());
@@ -11,7 +11,8 @@ app.get("/baskets", (request: Request, response: Response) => {
 });
 
 app.post("/baskets", (request: Request, response: Response) => {
-	const { products, discounts } = request.body;
+	const { products, reductionCode } = request.body;
+	const discounts = reductionCode && discountCodeMap[reductionCode] ? [discountCodeMap[reductionCode]] : [];
 	const total = calculPrice({ products, discounts });
 	response.json({ total });
 });

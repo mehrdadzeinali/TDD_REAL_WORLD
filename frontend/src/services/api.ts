@@ -29,12 +29,12 @@ export const basketApi = {
     products: Product[],
     reductionCode?: string
   ): Promise<number> => {
-    const response = await apiClient.post<number>("/totalPrice", {
+    const response = await apiClient.post<{ total: number }>("/baskets", {
       products,
       reductionCode: reductionCode || "",
     });
 
-    return response.data;
+    return response.data.total;
   },
 
   saveBasket: async (
