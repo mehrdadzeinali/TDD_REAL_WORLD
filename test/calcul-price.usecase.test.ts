@@ -67,6 +67,24 @@ describe("calculPrice", () => {
 		expect(calculPrice(basket, normalDate)).toBe(100);
 	});
 
+	it("should apply percentage discount only if minimum amount is reached", () => {
+		const basket = {
+			products: [{ name: "T-shirt", quantity: 1, type: "TSHIRT" as const, price: 20 }],
+			discounts: [{ type: "PERCENTAGE", value: 10, minAmount: 30 }],
+		};
+
+		expect(calculPrice(basket)).toBe(20);
+	});
+
+	it("should apply percentage discount when minimum amount is reached", () => {
+		const basket = {
+			products: [{ name: "T-shirt", quantity: 1, type: "TSHIRT" as const, price: 50 }],
+			discounts: [{ type: "PERCENTAGE", value: 10, minAmount: 30 }],
+		};
+
+		expect(calculPrice(basket)).toBe(45);
+	});
+
 	it("should apply percentage discount only on specific product type", () => {
 		const basket = {
 			products: [
