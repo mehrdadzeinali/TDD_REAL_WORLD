@@ -16,7 +16,13 @@ export type Basket = {
   discounts: Discount[];
 };
 
-export function calculPrice(basket: Basket): number {
+function isBlackFridayWeekend(date: Date): boolean {
+  const blackFridayStart = new Date("2025-11-28T00:00:00");
+  const blackFridayEnd = new Date("2025-11-30T23:59:59");
+  return date >= blackFridayStart && date <= blackFridayEnd;
+}
+
+export function calculPrice(basket: Basket, date: Date = new Date()): number {
   let total = basket.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
 
   for (const discount of basket.discounts) {
@@ -33,6 +39,9 @@ export function calculPrice(basket: Basket): number {
     }
     if (discount.type === "FIXED") {
       total = total - (discount as any).value;
+    }
+    if (discount.type === "BLACK_FRIDAY" && isBlackFridayWeekend(date)) {
+      total = total * 0.5;
     }
   }
 
